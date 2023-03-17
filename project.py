@@ -5,6 +5,9 @@ from geometry import Point
 import time
 from tkinter import *
 import sys 
+import math as m
+import pdb
+import time
 
 human_controller = False
 
@@ -27,6 +30,11 @@ def make_optimal_angle_for_quadrant(x, y):
     else: 
         return -np.pi/2
     
+def calculate_heading_angle(x, y): 
+    tanSlope = -x/y
+    hAngle = m.degrees(m.atan(tanSlope)) #this in degrees 
+    return hAngle
+    print("heading angle is", hAngle)
 
 w = World(dt, width = world_width, height = world_height, ppm = 6) # The world is 120 meters by 120 meters. ppm is the pixels per meter.
 
@@ -45,28 +53,45 @@ overlap_area = np.pi * (outer_radius ** 2 - inner_radius ** 2)
 example_car = Car(Point(91.75, 60), np.pi/2)
 
 # set the number of cars in the world
-num_cars = 3
-colors = ['red', 'green', 'blue']
+# num_cars = 2 #changing this doesn't do anything: why ?
+# colors = ['blue', 'green',] #changing this doesn't do anything: why ? 
+# cars = []
+# while num_cars > 0:
+#     # generate random polar coordinates
+#     radius = np.random.uniform(inner_radius, outer_radius )
+#     angle = np.random.uniform(0, 2*np.pi)
+
+#     # convert polar to cartesian coordinates
+#     x = radius * np.cos(angle) + world_width/2
+#     y = radius * np.sin(angle) + world_height/2
+
+#     # check if the point lies within the overlap area
+#     if (radius <= outer_radius - 2 and radius >= inner_radius + 2 and x >= 0 and x <= world_width and y >= 0 and y <= world_height):
+#         print(f"Generated point: ({x}, {y})")
+#         #c1 = Car(Point(x, y), make_optimal_angle_for_quadrant(x, y), calculate_heading_angle(x,y), colors[len(colors) % (num_cars)]) # rn set each car to this heading angle 
+#         c1 = Car(Point(x, y), calculate_heading_angle(x,y), colors[len(colors) % (num_cars)])
+#         num_cars = num_cars - 1
+#         cars.append(c1)    
+# for car in cars:
+#     w.add(car)
 cars = []
-while num_cars > 0:
-    # generate random polar coordinates
-    radius = np.random.uniform(inner_radius, outer_radius )
-    angle = np.random.uniform(0, 2*np.pi)
+c1 = Car(Point(91.75,60), np.pi/2)
+cars.append(c1)
+#w.render()
+time.sleep(3)
+# pdb.set_trace()
+c2 = Car(Point(28.25,60), 3 * np.pi/2, color="BLUE")
+cars.append(c2)
 
-    # convert polar to cartesian coordinates
-    x = radius * np.cos(angle) + world_width/2
-    y = radius * np.sin(angle) + world_height/2
+c3 = Car(Point(60,60 + inner_radius + 2), np.pi, color="SALMON")
+cars.append(c3)
 
-    # check if the point lies within the overlap area
-    if (radius <= outer_radius - 2 and radius >= inner_radius + 2 and x >= 0 and x <= world_width and y >= 0 and y <= world_height):
-        print(f"Generated point: ({x}, {y})")
-        
-        c1 = Car(Point(x, y), make_optimal_angle_for_quadrant(x, y), colors[len(colors) % (num_cars)]) # rn set each car to this heading angle 
-        num_cars = num_cars - 1
-        cars.append(c1)
-        
+c4 = Car(Point(60,60 - inner_radius - 2), 2 *  np.pi, color="PINK")
+cars.append(c4)
 for car in cars:
     w.add(car)
+    car.velocity = Point(0, 3.0)
+    car.angular_velocity = car.max_speed/inner_building_radius
     
 # add lane markers [just decorative]-> unnecessary now #TODO remove
 for lane_no in range(num_lanes - 1):
@@ -88,23 +113,27 @@ for k in range(600):
     lp = [0.] * len(cars)
     # lp = 0.
     for car_index in range(len(cars)): 
-        if car.distanceTo(cb) < desired_lane*(lane_width + lane_marker_width) + 0.2:
+        car = cars[car_index]
+        print("car index is", car_index)
+        if car.distanceTo(cb) < desired_lane*(lane_width) + 0.2:
             lp[car_index] += 0
-        elif car.distanceTo(rb) < (num_lanes - desired_lane - 1)*(lane_width + lane_marker_width) + 0.3:
-            lp[car_index] += 1.
-    v = [car.center - cb.center for car in cars]
+        elif car.distanceTo(rb) < (num_lanes - desired_lane - 1)*(lane_width) + 0.3:
+            lp[car_index] += 4.
+    v = [car.center - cb.center for car in cars] #distance from the car center to the middle of the circle
     for i in range(len(v)): 
         v[i] = np.mod(np.arctan2(v[i].y, v[i].x) + np.pi/2, 2*np.pi)
 
     for car_index in range(len(cars)): 
+        car = cars[car_index]
         if car.heading < v[car_index]:
             lp[car_index] += 0.7
         else: 
             lp[car_index] += 0.
     
     for car_index in range(len(cars)): 
-        if np.random.rand() < lp[car_index]:
+        if 0 < lp[car_index]:
             cars[car_index].set_control(0.2, 0.1)
+            cars[car_index].velocity = 0
         else: 
             cars[car_index].set_control(-0.1, 0.1)
     

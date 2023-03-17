@@ -11,7 +11,8 @@ dt = 0.1 # time steps in terms of seconds. In other words, 1/dt is the FPS.
 world_width = 120 # in meters
 world_height = 120
 inner_building_radius = 30
-num_lanes = 1
+#num_lanes = 1
+num_lanes = 2 #RC for some reason 2 lanes keeps the car in the lane. (1 lane goes off roading)
 lane_marker_width = 0.5
 num_of_lane_markers = 50
 lane_width = 3.5
@@ -46,9 +47,10 @@ w.add(rb)
 # A Car object is a dynamic object -- it can move. We construct it using its center location and heading angle.
 c1 = Car(Point(91.75,60), np.pi/2)
 c1.max_speed = 30.0 # let's say the maximum is 30 m/s (108 km/h)
+#RC i think we can add a c1.min_speed to make sure they don't all go like 2 mph. do we need to set an angular velocity 
 c1.velocity = Point(0, 3.0)
+c1.angular_velocity = c1.max_speed/inner_building_radius
 w.add(c1)
-
 w.render() # This visualizes the world we just constructed.
 
 
