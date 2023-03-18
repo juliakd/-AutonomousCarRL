@@ -1,0 +1,98 @@
+# first round EXP 1
+if new_state == 0: # collision
+        reward = -100 
+    if new_state == 1: # too close
+        reward = -1
+    if new_state == 2: # just right
+        reward = 10
+    if new_state == 3: # too far
+        reward = -3
+
+for i in range(10000): 
+    states_of_cars = [2, 2, 2]
+    epochs, penalties, reward = 0, 0, 0
+    for i in range(500): 
+
+[[[ 89.         -17.45830082 -18.12253719]
+  [100.         -19.9         89.        ]
+  [ 87.          89.         100.        ]
+  [ 87.         100.          87.        ]]
+
+ [[ 89.         -17.52938325 -17.71449218]
+  [100.         -19.9         89.        ]
+  [ 87.          89.         100.        ]
+  [ 87.         100.          87.        ]]
+
+ [[ 89.         -18.2048766  -18.14502016]
+  [100.         -19.9         89.        ]
+  [ 87.          89.         100.        ]
+  [ 87.         100.          87.        ]]]
+
+# EXP 2
+      reward = 0
+    if new_state == 0: # collision
+        reward = -100 
+    if new_state == 1: # too close
+        reward = -35
+    if new_state == 2: # just right
+        reward = 50
+    if new_state == 3: # too far
+        reward = -50
+
+        for i in range(10000): 
+    states_of_cars = [2, 2, 2]
+    epochs, penalties, reward = 0, 0, 0
+    for i in range(500): 
+
+    [[[415.         235.77864281 247.80537552]
+  [500.         273.5        415.        ]
+  [400.         415.         500.        ]
+  [400.         500.         400.        ]]
+
+ [[415.         241.86139905 242.98397554]
+  [500.         273.5        415.        ]
+  [400.         415.         500.        ]
+  [400.         500.         400.        ]]
+
+ [[415.         236.5089414  238.7657648 ]
+  [500.         273.5        415.        ]
+  [400.         415.         500.        ]
+  [400.         500.         400.        ]]]
+
+
+# EXP 3
+alpha = 0.001
+gamma = 0.2
+epsilon = 0.1 
+def cur_reward(new_state):
+    reward = 0
+    if new_state == 0: # collision
+        reward = -100 
+    if new_state == 1: # too close
+        reward = -35
+    if new_state == 2: # just right
+        reward = 50
+    if new_state == 3: # too far
+        reward = -50
+        
+    return reward 
+
+for i in range(10000): 
+    states_of_cars = [2, 2, 2]
+    epochs, penalties, reward = 0, 0, 0
+    for i in range(500): 
+
+  [[[ -22.41863358  -29.92341784  -30.81256449]
+  [  62.5        -104.02446061  -22.39827434]
+  [ -37.5         -22.5          62.5       ]
+  [ -37.34230315   62.5         -37.35475905]]
+
+ [[ -22.40555398  -28.95124489  -29.25422955]
+  [  62.5        -103.95413466  -22.40726823]
+  [ -37.5         -22.5          62.5       ]
+  [ -37.34820736   62.5         -37.34777155]]
+
+ [[ -22.41894399  -29.40277942  -31.25597933]
+  [  62.5        -104.02939146  -22.41729132]
+  [ -37.5         -22.5          62.5       ]
+  [ -37.33577621   62.5         -37.35785331]]]
